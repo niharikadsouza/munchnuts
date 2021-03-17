@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import static com.example.munchnuts.R.id.Offerlists;
 import static com.example.munchnuts.R.id.mapping;
 
-public class MainActivity<FusedLocationProviderClient> extends AppCompatActivity implements OnMapReadyCallback {
+public class MainActivity<FusedLocationProviderClient> extends AppCompatActivity implements OnMapReadyCallback ,View.OnClickListener{
 
 
 
@@ -47,32 +47,19 @@ public class MainActivity<FusedLocationProviderClient> extends AppCompatActivity
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         Button one = (Button) findViewById(mapping);
-        one.setOnClickListener((View.OnClickListener) MainActivity.this);
+        one.setOnClickListener((View.OnClickListener) this);
         Button two = (Button) findViewById(Offerlists);
-        two.setOnClickListener((View.OnClickListener) MainActivity.this);
+        two.setOnClickListener((View.OnClickListener) this);
 
 
-        public void onClick View v
-        {
-        switch (this.v.getId()) {
-            case mapping:
-                setContentView(R.layout.mapfragment);
-                fetchLocation();
-                break;
-            case Offerlists:
-                setContentView(R.layout.offerlist);
-                displayofferlists();
-                break;
 
-            default:
-                break;
-        }
-    }
+
+
     }
 
     private void displayofferlists() {
          ArrayList<Offersavailable> dataSet = new ArrayList<>();
-        OfflerListAdapter adapter = new OfflerListAdapter(dataSet, MainActivity.this);
+        OfflerListAdapter adapter = new OfflerListAdapter(dataSet, this);
 
 
 
@@ -145,7 +132,26 @@ public class MainActivity<FusedLocationProviderClient> extends AppCompatActivity
             fetchLocation();
         } break;
     }
-    } }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.mapping:
+                setContentView(R.layout.mapsactivity);
+                fetchLocation();
+                break;
+            case R.id.Offerlists:
+                setContentView(R.layout.offerlist);
+                displayofferlists();
+                break;
+
+            default:
+                break;
+        }
+
+    }
+}
 
 
 
