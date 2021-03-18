@@ -8,11 +8,12 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.munchnuts.Adapters.OfflerListAdapter;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,6 +25,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.example.munchnuts.R.id.Offerlists;
 import static com.example.munchnuts.R.id.mapping;
@@ -32,13 +34,15 @@ public class MainActivity<FusedLocationProviderClient> extends AppCompatActivity
 
 
 
-    private GoogleMap map;
+    private GoogleMap map;private ListView list;
     Location currentLocation;
     com.google.android.gms.location.FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
     public View v;
     public ListView listView;
     ArrayList<Offersavailable> dataSet;
+    public View convertView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -48,19 +52,41 @@ public class MainActivity<FusedLocationProviderClient> extends AppCompatActivity
 
         Button one = (Button) findViewById(mapping);
         one.setOnClickListener((View.OnClickListener) this);
+        finish();
         Button two = (Button) findViewById(Offerlists);
         two.setOnClickListener((View.OnClickListener) this);
-
-
-
-
+        finish();
 
     }
 
     private void displayofferlists() {
-         ArrayList<Offersavailable> dataSet = new ArrayList<>();
-        OfflerListAdapter adapter = new OfflerListAdapter(dataSet, this);
+        ListView simpleListView;
+        String[] OfferName={"diwali","New year"};
+        int[] OfferImages={R.drawable.discount,R.drawable.price_tag};
 
+         setContentView(R.layout.activity_main);
+            simpleListView=(ListView)findViewById(R.id.simpleListView);
+
+            ArrayList<HashMap<String,String>> arrayList=new ArrayList<>();
+            for (int i=0;i<OfferName.length;i++)
+            {
+                HashMap<String,String> hashMap=new HashMap<>();//create a hashmap to store the data in key value pair
+                hashMap.put("name",OfferName[i]);
+                hashMap.put("image",OfferImages[i]+"");
+                arrayList.add(hashMap);//add the hashmap into arrayList
+            }
+            String[] from={"name","image"};//string array
+            int[] to={R.id.name,R.id.image};//int array of views id's
+            OfflerListAdapter simpleAdapter=new OfflerListAdapter(this,arrayList,R.layout.offerlist,from,to);//Create object and set the parameters for simpleAdapter
+            simpleListView.setAdapter((ListAdapter) simpleAdapter);//sets the adapter for listView
+
+            //perform listView item click event
+            simpleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Toast.makeText(getApplicationContext(),OfferName[i],Toast.LENGTH_LONG).show();//show the selected image in toast according to position
+                }
+            });
 
 
     }
